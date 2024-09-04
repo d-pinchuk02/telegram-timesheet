@@ -1,3 +1,4 @@
+import http from "serverless-http";
 import { Telegraf } from "telegraf";
 
 const BOT_TOKEN = process.env.BOT_TOKEN as string;
@@ -15,4 +16,4 @@ bot.command('out', async (ctx) => {
 process.once('SIGINT', () => bot.stop('SIGINT'));
 process.once('SIGTERM', () => bot.stop('SIGTERM'));
 
-export default bot.webhookCallback("/.netlify/functions/update");
+export const handler = http(bot.webhookCallback("/.netlify/functions/update"));
