@@ -14,10 +14,10 @@ const redis = new Redis({
 const bot = new Telegraf(BOT_TOKEN);
 
 const getTimestamp = () => {
-  const now = new Date();
+  const unix = Math.floor(Date.now() / 1000);
+  const now = new Date(unix * 1000);
   const hours = String(now.getHours()).padStart(2, "0");
   const minutes = String(now.getMinutes()).padStart(2, "0");
-  const unix = now.getTime() / 1000;
   const formatted = `${hours}:${minutes}`;
 
   return {
