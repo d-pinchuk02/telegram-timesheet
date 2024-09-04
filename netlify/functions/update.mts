@@ -14,10 +14,7 @@ const redis = new Redis({
 const bot = new Telegraf(BOT_TOKEN);
 
 const formatHoursMinutes = (date: Date) => {
-  const hours = String(date.getHours()).padStart(2, "0");
-  const minutes = String(date.getMinutes()).padStart(2, "0");
-
-  return `${hours}:${minutes}`;
+  return date.toLocaleTimeString('uk-UA', { timeZone: 'Europe/Kyiv' })
 };
 
 const getTimestamp = () => {
