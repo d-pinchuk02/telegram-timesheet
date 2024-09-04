@@ -1,28 +1,18 @@
-import type { Context } from "@netlify/functions";
+import { Telegraf } from "telegraf";
 
-const BOT_TOKEN = process.env.BOT_TOKEN;
-const API_BASE = `https://api.telegram.org/bot${BOT_TOKEN}`;
-const API_SEND_MESSAGE = `${API_BASE}/sendMessage`;
+const BOT_TOKEN = process.env.BOT_TOKEN as string;
 
-const sendResponse = async (res: string, msg: any) => {
-  return await fetch(API_SEND_MESSAGE, {
-    method: "POST",
-    headers: new Headers({
-      "Content-Type": "application/json",
-    }),
-    body: JSON.stringify({
-      chat_id: msg.chat.id,
-      text: res,
-    }),
-  });
-}
+const bot = new Telegraf(BOT_TOKEN);
 
-export default async (req: Request, ctx: Context) => {
-  const body = await req.json();
-  console.log("Update from telegram:");
-  console.log(body);
+bot.command('in', async (ctx) => {
+  await ctx.replyWithMarkdownV2(`🟠 Tracked *clock in* at _09:41_`);
+});
 
-  await sendResponse("Test response!", body.message);
+bot.command('out', async (ctx) => {
+  await ctx.replyWithMarkdownV2(`🟢 Tracked *clock out* at _09:41_`);
+});
 
-  return new Response("");
-}
+process.once('SIGINT', () => bot.stop('SIGINT'));
+process.once('SIGTERM', () => bot.stop('SIGTERM'));
+
+export default bot.webhookCallback("/.netlify/functions/update");
