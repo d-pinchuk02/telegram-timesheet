@@ -13,12 +13,17 @@ const redis = new Redis({
 
 const bot = new Telegraf(BOT_TOKEN);
 
+const formatHoursMinutes = (date: Date) => {
+  const hours = String(date.getHours()).padStart(2, "0");
+  const minutes = String(date.getMinutes()).padStart(2, "0");
+
+  return `${hours}:${minutes}`;
+};
+
 const getTimestamp = () => {
   const unix = Math.floor(Date.now() / 1000);
   const now = new Date(unix * 1000);
-  const hours = String(now.getHours()).padStart(2, "0");
-  const minutes = String(now.getMinutes()).padStart(2, "0");
-  const formatted = `${hours}:${minutes}`;
+  const formatted = formatHoursMinutes(now);
 
   return {
     unix,
@@ -29,10 +34,9 @@ const getTimestamp = () => {
 bot.command("in", async (ctx) => {
   const time = getTimestamp();
 
-  await redis.zadd(
+  await redis.lpush(
     "events",
-    { nx: true },
-    { score: time.unix, member: "clock_in" },
+    ["clock_in", time.unix, time.formatted].join("|"),
   );
   await ctx.replyWithMarkdownV2(`🟠 Tracked *clock in* at _${time.formatted}_`);
 });
@@ -40,12 +44,30 @@ bot.command("in", async (ctx) => {
 bot.command("out", async (ctx) => {
   const time = getTimestamp();
 
-  await redis.zadd(
+  await redis.lpush(
     "events",
-    { nx: true },
-    { score: time.unix, member: "clock_out" },
+    ["clock_out", time.unix, time.formatted].join("|"),
   );
   await ctx.replyWithMarkdownV2(`🟢 Tracked *clock out* at _${time.formatted}_`);
+});
+
+bot.command("list", async (ctx) => {
+  const length = await redis.llen("events");
+  const elements = await redis.lrange("events", 0, length - 1);
+
+  const message = elements.map((element) => {
+    if (!element.startsWith("clock")) return element;
+
+    const [type, unix, formatted] = element.split("|");
+
+    if (type === "clock_in") {
+      return `🟠 ${formatted} - clock in`;
+    } else if (type === "clock_out") {
+      return `🟢 ${formatted} - clock out`;
+    }
+  }).join("\n");
+
+  await ctx.reply(message);
 });
 
 process.once("SIGINT", () => bot.stop("SIGINT"));
