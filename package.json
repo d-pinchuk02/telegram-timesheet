@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@netlify/functions": "^2.8.1",
+    "serverless-http": "^3.2.0",
     "telegraf": "^4.16.3"
   }
 }
