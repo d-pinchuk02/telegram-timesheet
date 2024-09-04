@@ -3,6 +3,7 @@ import { Telegraf } from "telegraf";
 import { Redis } from "@upstash/redis";
 
 const BOT_TOKEN = process.env.BOT_TOKEN as string;
+const BOT_WHITELIST = (process.env.BOT_WHITELIST as string).split(",");
 const REDIS_URL = process.env.UPSTASH_REDIS_REST_URL as string;
 const REDIS_TOKEN = process.env.UPSTASH_REDIS_REST_TOKEN as string;
 
@@ -27,6 +28,16 @@ const getTimestamp = () => {
     formatted,
   };
 }
+
+bot.use((ctx, next) => {
+  const userId = ctx.from!.id.toString();
+
+  if (BOT_WHITELIST.includes(userId)) {
+    return next();
+  }
+
+  return ctx.reply("🔒 Unauthorized!");
+});
 
 bot.command("in", async (ctx) => {
   const time = getTimestamp();
