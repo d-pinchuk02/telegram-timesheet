@@ -42,7 +42,7 @@ bot.use((ctx, next) => {
 const handleInCommand = async (ctx: Context) => {
   const time = getTimestamp();
 
-  await redis.lpush(
+  await redis.rpush(
     "events",
     ["clock_in", time.unix, time.formatted].join("|"),
   );
@@ -55,7 +55,7 @@ bot.hears("🔵 Clock In", handleInCommand);
 const handleOutCommand = async (ctx: Context) => {
   const time = getTimestamp();
 
-  await redis.lpush(
+  await redis.rpush(
     "events",
     ["clock_out", time.unix, time.formatted].join("|"),
   );
