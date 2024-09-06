@@ -46,7 +46,7 @@ bot.command("in", async (ctx) => {
     "events",
     ["clock_in", time.unix, time.formatted].join("|"),
   );
-  await ctx.replyWithMarkdownV2(`🟠 Tracked *clock in* at _${time.formatted}_`);
+  await ctx.replyWithMarkdownV2(`🔵 Tracked *clock in* at _${time.formatted}_`);
 });
 
 bot.command("out", async (ctx) => {
@@ -69,7 +69,7 @@ bot.command("list", async (ctx) => {
     const [type, unix, formatted] = element.split("|");
 
     if (type === "clock_in") {
-      return `\n🟠 ${formatted} - clock in`;
+      return `\n🔵 ${formatted} - clock in`;
     } else if (type === "clock_out") {
       return `🟢 ${formatted} - clock out`;
     }
