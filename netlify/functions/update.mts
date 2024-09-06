@@ -1,11 +1,16 @@
 import http from "serverless-http";
-import { Telegraf, type Context } from "telegraf";
+import { Telegraf, Markup, type Context } from "telegraf";
 import { Redis } from "@upstash/redis";
 
 const BOT_TOKEN = process.env.BOT_TOKEN as string;
 const BOT_WHITELIST = (process.env.BOT_WHITELIST as string).split(",");
 const REDIS_URL = process.env.UPSTASH_REDIS_REST_URL as string;
 const REDIS_TOKEN = process.env.UPSTASH_REDIS_REST_TOKEN as string;
+
+const DEFAULT_KEYBOARD = Markup.keyboard([
+  ["🔵 Clock In", "🟢 Clock Out"],
+  ["📋 List Entries"],
+]).resize().persistent(true)
 
 const redis = new Redis({
   url: REDIS_URL,
@@ -46,7 +51,7 @@ const handleInCommand = async (ctx: Context) => {
     "events",
     ["clock_in", time.unix, time.formatted].join("|"),
   );
-  await ctx.replyWithMarkdownV2(`🔵 Tracked *clock in* at _${time.formatted}_`);
+  await ctx.replyWithMarkdownV2(`🔵 Tracked *clock in* at _${time.formatted}_`, DEFAULT_KEYBOARD);
 };
 
 bot.command("in", handleInCommand);
@@ -59,13 +64,13 @@ const handleOutCommand = async (ctx: Context) => {
     "events",
     ["clock_out", time.unix, time.formatted].join("|"),
   );
-  await ctx.replyWithMarkdownV2(`🟢 Tracked *clock out* at _${time.formatted}_`);
+  await ctx.replyWithMarkdownV2(`🟢 Tracked *clock out* at _${time.formatted}_`, DEFAULT_KEYBOARD);
 };
 
 bot.command("out", handleOutCommand);
 bot.hears("🟢 Clock Out", handleOutCommand);
 
-bot.command("list", async (ctx) => {
+const handleListCommand = async (ctx: Context) => {
   const length = await redis.llen("events");
   const elements = await redis.lrange("events", 0, length - 1);
 
@@ -81,8 +86,11 @@ bot.command("list", async (ctx) => {
     }
   }).join("\n");
 
-  await ctx.reply(message);
-});
+  await ctx.replyWithMarkdownV2(message, DEFAULT_KEYBOARD);
+};
+
+bot.command("list", handleListCommand);
+bot.hears("📋 List Entries", handleListCommand);
 
 process.once("SIGINT", () => bot.stop("SIGINT"));
 process.once("SIGTERM", () => bot.stop("SIGTERM"));
