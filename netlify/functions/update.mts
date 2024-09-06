@@ -69,7 +69,7 @@ bot.command("list", async (ctx) => {
     const [type, unix, formatted] = element.split("|");
 
     if (type === "clock_in") {
-      return `🟠 ${formatted} - clock in`;
+      return `\n🟠 ${formatted} - clock in`;
     } else if (type === "clock_out") {
       return `🟢 ${formatted} - clock out`;
     }
