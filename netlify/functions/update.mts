@@ -1,5 +1,5 @@
 import http from "serverless-http";
-import { Telegraf } from "telegraf";
+import { Telegraf, type Context } from "telegraf";
 import { Redis } from "@upstash/redis";
 
 const BOT_TOKEN = process.env.BOT_TOKEN as string;
@@ -39,7 +39,7 @@ bot.use((ctx, next) => {
   return ctx.reply("🔒 Unauthorized!");
 });
 
-bot.command("in", async (ctx) => {
+const handleInCommand = async (ctx: Context) => {
   const time = getTimestamp();
 
   await redis.lpush(
@@ -47,9 +47,12 @@ bot.command("in", async (ctx) => {
     ["clock_in", time.unix, time.formatted].join("|"),
   );
   await ctx.replyWithMarkdownV2(`🔵 Tracked *clock in* at _${time.formatted}_`);
-});
+};
 
-bot.command("out", async (ctx) => {
+bot.command("in", handleInCommand);
+bot.hears("🔵 Clock In", handleInCommand);
+
+const handleOutCommand = async (ctx: Context) => {
   const time = getTimestamp();
 
   await redis.lpush(
@@ -57,7 +60,10 @@ bot.command("out", async (ctx) => {
     ["clock_out", time.unix, time.formatted].join("|"),
   );
   await ctx.replyWithMarkdownV2(`🟢 Tracked *clock out* at _${time.formatted}_`);
-});
+};
+
+bot.command("out", handleOutCommand);
+bot.hears("🟢 Clock Out", handleOutCommand);
 
 bot.command("list", async (ctx) => {
   const length = await redis.llen("events");
