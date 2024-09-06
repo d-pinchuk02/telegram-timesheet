@@ -80,9 +80,9 @@ const handleListCommand = async (ctx: Context) => {
     const [type, unix, formatted] = element.split("|");
 
     if (type === "clock_in") {
-      return `\n🔵 ${formatted} \- clock in`;
+      return `\n🔵 ${formatted} \\- clock in`;
     } else if (type === "clock_out") {
-      return `🟢 ${formatted} \- clock out`;
+      return `🟢 ${formatted} \\- clock out`;
     }
   }).join("\n");
 
