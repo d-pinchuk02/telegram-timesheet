@@ -16,11 +16,29 @@
       }
     }
   </script>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,400..900;1,14..32,100..900&display=swap" rel="stylesheet">
+  <style>
+    /* inter-regular - latin */
+    @font-face {
+      font-display: swap; /* Check https://developer.mozilla.org/en-US/docs/Web/CSS/@font-face/font-display for other options. */
+      font-family: 'Inter';
+      font-style: normal;
+      font-weight: 400;
+      src: url('./fonts/inter-v18-latin-regular.woff2') format('woff2'); /* Chrome 36+, Opera 23+, Firefox 39+, Safari 12+, iOS 10+ */
+    }
+
+    /* inter-600 - latin */
+    @font-face {
+      font-display: swap; /* Check https://developer.mozilla.org/en-US/docs/Web/CSS/@font-face/font-display for other options. */
+      font-family: 'Inter';
+      font-style: normal;
+      font-weight: 600;
+      src: url('./fonts/inter-v18-latin-600.woff2') format('woff2'); /* Chrome 36+, Opera 23+, Firefox 39+, Safari 12+, iOS 10+ */
+    }
+  </style>
 </head>
 <body class="relative flex min-h-screen flex-col bg-slate-50 font-sans font-inter">
   <div class="flex flex-col gap-6 container p-4 mx-auto">
-    <h1 class="text-4xl font-bold text-slate-900">Timesheet</h1>
+    <h1 class="text-4xl font-semibold text-slate-900">Timesheet</h1>
 
     <div class="js-groups flex flex-col gap-6">
       <section class="js-skeleton space-y-2 animate-pulse">
@@ -86,14 +104,14 @@
 
     <template class="js-group-template">
       <section class="js-template-root js-group space-y-2">
-        <h2 class="js-group-date text-2xl text-slate-500 tabular-nums">PLACEHOLDER</h2>
+        <h2 class="js-group-date text-2xl font-semibold text-slate-500 tabular-nums">PLACEHOLDER</h2>
       </section>
     </template>
 
     <template class="js-entry-template">
-      <div class="js-template-root js-entry flex rounded-xl font-semibold shadow-md">
-        <div class="js-entry-time w-24 p-2 rounded-l-xl text-white text-2xl flex text-center items-center justify-center tabular-nums">PLACEHOLDER</div>
-        <div class="js-entry-type px-4 py-2 rounded-r-xl grow border bg-white text-xl font-medium text-slate-700 flex text-left items-center justify-start">PLACEHOLDER</div>
+      <div class="js-template-root js-entry flex rounded-xl shadow-md">
+        <div class="js-entry-time w-24 p-2 rounded-l-xl text-white text-2xl flex text-center items-center justify-center font-semibold tabular-nums">PLACEHOLDER</div>
+        <div class="js-entry-type px-4 py-2 rounded-r-xl grow border bg-white text-xl text-slate-700 flex text-left items-center justify-start">PLACEHOLDER</div>
       </div>
     </template>
   </div>
