@@ -1,6 +1,9 @@
 import http from "serverless-http";
 import { Telegraf, Markup, type Context } from "telegraf";
 import { Redis } from "@upstash/redis";
+import '@formatjs/intl-datetimeformat/polyfill';
+import '@formatjs/intl-datetimeformat/locale-data/en';
+import '@formatjs/intl-datetimeformat/add-all-tz';
 
 const BOT_TOKEN = process.env.BOT_TOKEN as string;
 const BOT_WHITELIST = (process.env.BOT_WHITELIST as string).split(",");
@@ -11,6 +14,25 @@ const DEFAULT_KEYBOARD = Markup.keyboard([
   ["🔵 Clock In", "🟢 Clock Out"],
   ["📋 List Entries"],
 ]).resize().persistent(true)
+
+const ENTRY_TYPES = {
+  "clock_in": "Clock in",
+  "clock_out": "Clock out",
+};
+
+const ENTRY_TYPE_COLORS = {
+  "clock_in": "🔵",
+  "clock_out": "🟢",
+  "undefined": "🟣",
+};
+
+const humanDateIntl = new Intl.DateTimeFormat("en-US", {
+  weekday: "long",
+  month: "long",
+  day: "numeric",
+  year: "numeric",
+  timeZone: "Europe/Kyiv",
+});
 
 const redis = new Redis({
   url: REDIS_URL,
@@ -74,17 +96,50 @@ const handleListCommand = async (ctx: Context) => {
   const length = await redis.llen("events");
   const elements = await redis.lrange("events", 0, length - 1);
 
-  const message = elements.map((element) => {
-    if (!element.startsWith("clock")) return element;
+  const entries = elements.map((element, elementIndex) => {
+    const [type, timestamp, formatted] = element.split("|");
+    const date = new Date(Number(timestamp) * 1000);
+    const humanDate = humanDateIntl.format(date);
 
-    const [type, unix, formatted] = element.split("|");
+    return {
+      id: elementIndex,
+      type,
+      timestamp,
+      formatted,
+      humanDate,
+    };
+  // @ts-ignore
+  }).toSorted((a, b) => b.timestamp - a.timestamp);
 
-    if (type === "clock_in") {
-      return `\n🔵 ${formatted} \\- clock in`;
-    } else if (type === "clock_out") {
-      return `🟢 ${formatted} \\- clock out`;
+  let groupedEntries: any[] = [];
+  let prevIndex = 0,
+      groupIndex = 0;
+  entries.forEach((entry, entryIndex) => {
+    if (entries[prevIndex].humanDate === entry.humanDate) {
+      groupedEntries[groupIndex] ||= [];
+      groupedEntries[groupIndex].push(entry);
+    } else {
+      groupedEntries.push([entry]);
+      groupIndex++;
     }
-  }).join("\n");
+
+    prevIndex = entryIndex;
+  });
+
+  const message = groupedEntries.map((entryGroup) => {
+    const header = `*${entryGroup[0].humanDate}*\n`;
+    const entryStrings = entryGroup.map((entry: any) => {
+      // @ts-ignore
+      const color = ENTRY_TYPE_COLORS[entry.type] ?? ENTRY_TYPE_COLORS["undefined"];
+      const time = entry.formatted.substring(0, 5);
+      // @ts-ignore
+      const type = ENTRY_TYPES[entry.type] ?? entry.type.replaceAll("_", " ");
+
+      return `${color} ${time} | ${type}`;
+    }).join("\n");
+
+    return header + entryStrings;
+  }).join("\n\n");
 
   await ctx.replyWithMarkdownV2(message, DEFAULT_KEYBOARD);
 };
