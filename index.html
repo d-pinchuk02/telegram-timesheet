@@ -109,6 +109,8 @@
     const ENTRY_TYPES = {
       "clock_in": "Clock in",
       "clock_out": "Clock out",
+      "lunch_start": "Lunch start",
+      "lunch_end": "Lunch end",
     };
 
     const skeletonElements = document.querySelectorAll(".js-skeleton");
@@ -166,6 +168,9 @@
       } else if (entry.type === "clock_out") {
         entryTime.classList.add("bg-green-600");
         entryType.classList.add("border-green-600");
+      } else if (entry.type === "lunch_start" || entry.type === "lunch_end") {
+        entryTime.classList.add("bg-orange-600");
+        entryType.classList.add("border-orange-600");
       } else {
         entryTime.classList.add("bg-violet-600");
         entryType.classList.add("border-violet-600");
