@@ -108,8 +108,9 @@ const handleListCommand = async (ctx: Context) => {
       formatted,
       humanDate,
     };
+  });
   // @ts-ignore
-  }).toSorted((a, b) => b.timestamp - a.timestamp);
+  entries.sort((a, b) => b.timestamp - a.timestamp);
 
   let groupedEntries: any[] = [];
   let prevIndex = 0,
