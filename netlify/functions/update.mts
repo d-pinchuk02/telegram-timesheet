@@ -12,17 +12,22 @@ const REDIS_TOKEN = process.env.UPSTASH_REDIS_REST_TOKEN as string;
 
 const DEFAULT_KEYBOARD = Markup.keyboard([
   ["🔵 Clock In", "🟢 Clock Out"],
+  ["🟠 Start Lunch", "🟠 End Lunch"],
   ["📋 List Entries"],
 ]).resize().persistent(true)
 
 const ENTRY_TYPES = {
   "clock_in": "Clock in",
   "clock_out": "Clock out",
+  "lunch_start": "Lunch start",
+  "lunch_end": "Lunch end",
 };
 
 const ENTRY_TYPE_COLORS = {
   "clock_in": "🔵",
   "clock_out": "🟢",
+  "lunch_start": "🟠",
+  "lunch_end": "🟠",
   "undefined": "🟣",
 };
 
@@ -91,6 +96,32 @@ const handleOutCommand = async (ctx: Context) => {
 
 bot.command("out", handleOutCommand);
 bot.hears("🟢 Clock Out", handleOutCommand);
+
+const handleLunchStartCommand = async (ctx: Context) => {
+  const time = getTimestamp();
+
+  await redis.rpush(
+    "events",
+    ["lunch_start", time.unix, time.formatted].join("|"),
+  );
+  await ctx.replyWithMarkdownV2(`${ENTRY_TYPE_COLORS["lunch_start"]} Tracked *lunch start* at _${time.formatted}_`, DEFAULT_KEYBOARD);
+};
+
+bot.command("lunch_start", handleLunchStartCommand);
+bot.hears("🟠 Start Lunch", handleLunchStartCommand);
+
+const handleLunchEndCommand = async (ctx: Context) => {
+  const time = getTimestamp();
+
+  await redis.rpush(
+    "events",
+    ["lunch_end", time.unix, time.formatted].join("|"),
+  );
+  await ctx.replyWithMarkdownV2(`${ENTRY_TYPE_COLORS["lunch_end"]} Tracked *lunch end* at _${time.formatted}_`, DEFAULT_KEYBOARD);
+};
+
+bot.command("lunch_end", handleLunchEndCommand);
+bot.hears("🟠 End Lunch", handleLunchEndCommand);
 
 const handleListCommand = async (ctx: Context) => {
   const length = await redis.llen("events");
