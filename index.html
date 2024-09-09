@@ -86,13 +86,13 @@
 
     <template class="js-group-template">
       <section class="js-template-root js-group space-y-2">
-        <h2 class="js-group-date text-2xl text-slate-500">PLACEHOLDER</h2>
+        <h2 class="js-group-date text-2xl text-slate-500 tabular-nums">PLACEHOLDER</h2>
       </section>
     </template>
 
     <template class="js-entry-template">
       <div class="js-template-root js-entry flex rounded-xl font-semibold shadow-md">
-        <div class="js-entry-time w-24 px-4 py-2 rounded-l-xl text-white text-2xl flex text-right items-center justify-end">PLACEHOLDER</div>
+        <div class="js-entry-time w-24 p-2 rounded-l-xl text-white text-2xl flex text-center items-center justify-center tabular-nums">PLACEHOLDER</div>
         <div class="js-entry-type px-4 py-2 rounded-r-xl grow border bg-white text-xl font-medium text-slate-700 flex text-left items-center justify-start">PLACEHOLDER</div>
       </div>
     </template>
@@ -154,14 +154,14 @@
       entryType.textContent = ENTRY_TYPES[entry.type] ?? entry.type.replaceAll("_", " ");
 
       if (entry.type === "clock_in") {
-        entryTime.classList.add("bg-blue-500");
-        entryType.classList.add("border-blue-500");
+        entryTime.classList.add("bg-blue-600");
+        entryType.classList.add("border-blue-600");
       } else if (entry.type === "clock_out") {
-        entryTime.classList.add("bg-green-500");
-        entryType.classList.add("border-green-500");
+        entryTime.classList.add("bg-green-600");
+        entryType.classList.add("border-green-600");
       } else {
-        entryTime.classList.add("bg-violet-500");
-        entryType.classList.add("border-violet-500");
+        entryTime.classList.add("bg-violet-600");
+        entryType.classList.add("border-violet-600");
       }
 
       return newEntry;
