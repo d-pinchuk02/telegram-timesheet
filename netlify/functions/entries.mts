@@ -32,8 +32,9 @@ export const handler = async (req: Request, ctx: Context) => {
       formatted,
       humanDate,
     };
+  });
   // @ts-ignore
-  }).toSorted((a, b) => b.timestamp - a.timestamp);
+  entries.sort((a, b) => b.timestamp - a.timestamp);
 
   return {
     body: JSON.stringify(entries),
