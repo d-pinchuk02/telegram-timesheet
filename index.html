@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        fontFamily: {
+          sans: ['"Inter", sans-serif']
+        }
+      }
+    }
+  </script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,400..900;1,14..32,100..900&display=swap" rel="stylesheet">
+</head>
+<body class="relative flex min-h-screen flex-col bg-slate-50 font-sans font-inter">
+  <div class="flex flex-col gap-6 container p-4 mx-auto">
+    <h1 class="text-4xl font-bold text-slate-900">Timesheet</h1>
+
+    <div class="js-groups flex flex-col gap-6">
+      <section class="js-skeleton space-y-2 animate-pulse">
+        <h2 class="text-2xl bg-slate-200 rounded-xl">&nbsp;</h2>
+        <div class="flex rounded-xl">
+          <div class="w-24 px-4 py-2 rounded-l-xl bg-slate-200 text-white text-2xl flex">&nbsp;</div>
+          <div class="px-4 py-2 rounded-r-xl grow border border-slate-200 bg-slate-50">&nbsp;</div>
+        </div>
+        <div class="flex rounded-xl">
+          <div class="w-24 px-4 py-2 rounded-l-xl bg-slate-200 text-white text-2xl flex">&nbsp;</div>
+          <div class="px-4 py-2 rounded-r-xl grow border border-slate-200 bg-slate-50">&nbsp;</div>
+        </div>
+      </section>
+  
+      <section class="js-skeleton space-y-2 animate-pulse">
+        <h2 class="text-2xl bg-slate-200 rounded-xl">&nbsp;</h2>
+        <div class="flex rounded-xl">
+          <div class="w-24 px-4 py-2 rounded-l-xl bg-slate-200 text-white text-2xl flex">&nbsp;</div>
+          <div class="px-4 py-2 rounded-r-xl grow border border-slate-200 bg-slate-50">&nbsp;</div>
+        </div>
+        <div class="flex rounded-xl">
+          <div class="w-24 px-4 py-2 rounded-l-xl bg-slate-200 text-white text-2xl flex">&nbsp;</div>
+          <div class="px-4 py-2 rounded-r-xl grow border border-slate-200 bg-slate-50">&nbsp;</div>
+        </div>
+      </section>
+  
+      <section class="js-skeleton space-y-2 animate-pulse">
+        <h2 class="text-2xl bg-slate-200 rounded-xl">&nbsp;</h2>
+        <div class="flex rounded-xl">
+          <div class="w-24 px-4 py-2 rounded-l-xl bg-slate-200 text-white text-2xl flex">&nbsp;</div>
+          <div class="px-4 py-2 rounded-r-xl grow border border-slate-200 bg-slate-50">&nbsp;</div>
+        </div>
+        <div class="flex rounded-xl">
+          <div class="w-24 px-4 py-2 rounded-l-xl bg-slate-200 text-white text-2xl flex">&nbsp;</div>
+          <div class="px-4 py-2 rounded-r-xl grow border border-slate-200 bg-slate-50">&nbsp;</div>
+        </div>
+      </section>
+  
+      <section class="js-skeleton space-y-2 animate-pulse">
+        <h2 class="text-2xl bg-slate-200 rounded-xl">&nbsp;</h2>
+        <div class="flex rounded-xl">
+          <div class="w-24 px-4 py-2 rounded-l-xl bg-slate-200 text-white text-2xl flex">&nbsp;</div>
+          <div class="px-4 py-2 rounded-r-xl grow border border-slate-200 bg-slate-50">&nbsp;</div>
+        </div>
+        <div class="flex rounded-xl">
+          <div class="w-24 px-4 py-2 rounded-l-xl bg-slate-200 text-white text-2xl flex">&nbsp;</div>
+          <div class="px-4 py-2 rounded-r-xl grow border border-slate-200 bg-slate-50">&nbsp;</div>
+        </div>
+      </section>
+  
+      <section class="js-skeleton space-y-2 animate-pulse">
+        <h2 class="text-2xl bg-slate-200 rounded-xl">&nbsp;</h2>
+        <div class="flex rounded-xl">
+          <div class="w-24 px-4 py-2 rounded-l-xl bg-slate-200 text-white text-2xl flex">&nbsp;</div>
+          <div class="px-4 py-2 rounded-r-xl grow border border-slate-200 bg-slate-50">&nbsp;</div>
+        </div>
+        <div class="flex rounded-xl">
+          <div class="w-24 px-4 py-2 rounded-l-xl bg-slate-200 text-white text-2xl flex">&nbsp;</div>
+          <div class="px-4 py-2 rounded-r-xl grow border border-slate-200 bg-slate-50">&nbsp;</div>
+        </div>
+      </section>
+    </div>
+
+    <template class="js-group-template">
+      <section class="js-template-root js-group space-y-2">
+        <h2 class="js-group-date text-2xl text-slate-500">PLACEHOLDER</h2>
+      </section>
+    </template>
+
+    <template class="js-entry-template">
+      <div class="js-template-root js-entry flex rounded-xl font-semibold shadow-md">
+        <div class="js-entry-time w-24 px-4 py-2 rounded-l-xl text-white text-2xl flex text-right items-center justify-end">PLACEHOLDER</div>
+        <div class="js-entry-type px-4 py-2 rounded-r-xl grow border bg-white text-xl font-medium text-slate-700 flex text-left items-center justify-start">PLACEHOLDER</div>
+      </div>
+    </template>
+  </div>
+
+  <script type="text/javascript">
+    const ENTRY_TYPES = {
+      "clock_in": "Clock in",
+      "clock_out": "Clock out",
+    };
+
+    const skeletonElements = document.querySelectorAll(".js-skeleton");
+    const groupTemplate = document.querySelector(".js-group-template");
+    const entryTemplate = document.querySelector(".js-entry-template");
+    const groupList = document.querySelector(".js-groups");
+
+    const fetchGroups = async () => {
+      const apiEntriesUrl = `${window.location.origin}/.netlify/functions/entries`;
+      const apiEntriesConfig = {
+        mode: "cors",
+        headers: {
+          "Accept": "application/json",
+        },
+      };
+      const apiEntriesResponse = await fetch(apiEntriesUrl, apiEntriesConfig);
+
+      return await apiEntriesResponse.json();
+    };
+
+    const renderGroups = ({ entries }) => {
+      entries.forEach((entryGroup) => {
+        const newGroup = renderGroup(entryGroup);
+        groupList.appendChild(newGroup);
+      });
+
+      skeletonElements.forEach((skeletonElement) => {
+        skeletonElement.classList.add("sr-only");
+      });
+    };
+
+    const renderGroup = (entryGroup) => {
+      const newGroup = groupTemplate.content.cloneNode(true).querySelector(".js-template-root");
+      const groupDate = newGroup.querySelector(".js-group-date");
+      groupDate.textContent = entryGroup[0].humanDate;
+      entryGroup.forEach((entry) => {
+        const newEntry = renderEntry(entry);
+        newGroup.appendChild(newEntry);
+      });
+
+      return newGroup;
+    };
+
+    const renderEntry = (entry) => {
+      const newEntry = entryTemplate.content.cloneNode(true).querySelector(".js-template-root");
+      const entryTime = newEntry.querySelector(".js-entry-time");
+      entryTime.textContent = entry.formatted.substring(0, 5);
+
+      const entryType = newEntry.querySelector(".js-entry-type");
+      entryType.textContent = ENTRY_TYPES[entry.type] ?? entry.type.replaceAll("_", " ");
+
+      if (entry.type === "clock_in") {
+        entryTime.classList.add("bg-blue-500");
+        entryType.classList.add("border-blue-500");
+      } else if (entry.type === "clock_out") {
+        entryTime.classList.add("bg-green-500");
+        entryType.classList.add("border-green-500");
+      } else {
+        entryTime.classList.add("bg-violet-500");
+        entryType.classList.add("border-violet-500");
+      }
+
+      return newEntry;
+    };
+
+    const fetchAndRenderGroups = async () => {
+      const apiEntriesData = await fetchGroups();
+      let entries = [];
+      let prevIndex = 0,
+          groupIndex = 0;
+      apiEntriesData.forEach((entry, entryIndex) => {
+        if (apiEntriesData[prevIndex].humanDate === entry.humanDate) {
+          entries[groupIndex] ||= [];
+          entries[groupIndex].push(entry);
+        } else {
+          entries.push([entry]);
+          groupIndex++;
+        }
+
+        prevIndex = entryIndex;
+      });
+
+      renderGroups({ entries });
+    };
+
+    fetchAndRenderGroups().catch(console.error);
+  </script>
+</body>
+</html>
