@@ -2,6 +2,13 @@
   "name": "telegram-timesheet",
   "module": "index.ts",
   "type": "module",
+  "scripts": {
+    "dev:css": "postcss -w -o css/main.min.css css/main.css",
+    "dev:netlify": "netlify dev",
+    "dev": "conc \"npm:dev:css\" \"npm:dev:netlify\"",
+    "build:css": "postcss -o css/main.min.css css/main.css",
+    "build": "npm run build:css"
+  },
   "devDependencies": {
     "@types/bun": "latest",
     "autoprefixer": "^10.4.20",
