@@ -136,7 +136,7 @@ const handleListCommand = async (ctx: Context) => {
       // @ts-ignore
       const type = ENTRY_TYPES[entry.type] ?? entry.type.replaceAll("_", " ");
 
-      return `${color} ${time} | ${type}`;
+      return `${color} ${time} \\| ${type}`;
     }).join("\n");
 
     return header + entryStrings;
